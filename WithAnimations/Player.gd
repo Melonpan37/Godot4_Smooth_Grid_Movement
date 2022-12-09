@@ -1,6 +1,18 @@
 extends AnimatedSprite2D
 
-
+enum {UP, RIGHT, DOWN, LEFT}
+const DIR2VEC = [
+	Vector2.UP,
+	Vector2.RIGHT,
+	Vector2.DOWN,
+	Vector2.LEFT
+]
+const DIR2STR = [
+	"up",
+	"right",
+	"down",
+	"left"
+]
 const MOVE_INPUT_MAP = [
 	"ui_up",
 	"ui_right",
@@ -9,12 +21,12 @@ const MOVE_INPUT_MAP = [
 ]
 
 
-const MOTION_DISTANCE = Consts.CELL_SIZE
-const MOTION_DURATION = 0.15
+const MOTION_DISTANCE : int = 16
+const MOTION_DURATION : float = 0.15
 
 enum {IDLE, WALK}
 var state = IDLE
-var direction : int = Consts.DOWN
+var direction : int = DOWN
 
 func get_movement_input() -> int :
 	for i in range(MOVE_INPUT_MAP.size()) :
@@ -31,7 +43,7 @@ func move() :
 	if directionInput == -1 : return
 	direction = directionInput
 	state = WALK
-	var path = Consts.DIR2VEC[directionInput] * MOTION_DISTANCE
+	var path = DIR2VEC[directionInput] * MOTION_DISTANCE
 	var tween = create_tween()
 	tween.tween_property(self, "position", path, MOTION_DURATION).as_relative()
 	tween.set_loops(2)
@@ -55,5 +67,5 @@ func animation_state(direction : int, state : int) :
 	match state :
 		IDLE : animation = "idle_"
 		WALK : animation = "walk_"
-	animation += Consts.DIR2STR[direction]
+	animation += DIR2STR[direction]
 	self.animation = animation
